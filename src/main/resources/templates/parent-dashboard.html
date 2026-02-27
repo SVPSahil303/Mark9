@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Parent Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/parent_dashboard.css}">
+</head>
+<body>
+
+<div class="dashboard-shell">
+
+    <!-- ================= HEADER ================= -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <h2 th:text="'Welcome, ' + ${parent.fullName} + '!'"></h2>
+            <p class="subtitle">Manage your children and track their learning journey.</p>
+        </div>
+        <a th:href="@{/logout}" class="logout-btn">Logout</a>
+    </header>
+
+    <main class="dashboard-main">
+
+        <!-- ================= LEFT: CHILDREN ================= -->
+        <section class="children-section">
+
+            <h3>Your Children</h3>
+
+            <div th:if="${#lists.isEmpty(children)}" class="empty-state-card">
+                <p>You haven’t added any children yet.</p>
+                <p class="hint">Use the form on the right to add your first child.</p>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(children)}" class="children-grid">
+
+                <div class="child-card" th:each="child : ${children}">
+
+                    <!-- Avatar -->
+                    <div class="child-avatar">
+                        <span th:text="${#strings.substring(child.childName,0,1)}">S</span>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="child-body">
+
+                        <div class="child-header">
+                            <h4 th:text="${child.childName}">Child Name</h4>
+                            <p class="child-age" th:text="'Age: ' + ${child.age}">Age: 9</p>
+                        </div>
+
+                        <!-- NUMBERS -->
+                        <div class="learning-block number-block">
+                            <h5>📊 Numbers</h5>
+
+                            <div class="child-stats">
+                                <span class="child-stat" th:text="'Total Learned: ' + ${child.totalDigitsLearned}"></span>
+                                <span class="child-stat" th:text="'Goal: ' + ${child.digitGoal}"></span>
+                            </div>
+
+                            <form class="goal-form"
+                                  th:action="@{'/parent/children/' + ${child.id} + '/goal'}"
+                                  method="post">
+                                <input type="hidden" name="type" value="NUMBER"/>
+                                <input type="number" name="goalCount" min="1" th:value="${child.digitGoal}"/>
+                                <button type="submit" class="ghost-button small-btn">Update Goal</button>
+                            </form>
+
+                            <a class="ghost-button"
+                               th:href="@{'/parent/children/' + ${child.id} + '/progress?type=NUMBER'}">
+                                View Number Progress
+                            </a>
+                        </div>
+
+                        <!-- ALPHABETS -->
+                        <div class="learning-block alphabet-block">
+                            <h5>🔤 Alphabets</h5>
+
+                            <div class="child-stats">
+                                <span class="child-stat" th:text="'Total Learned: ' + ${child.totalAlphabetsLearned}"></span>
+                                <span class="child-stat" th:text="'Goal: ' + ${child.alphabetGoal}"></span>
+                            </div>
+
+                            <form class="goal-form"
+                                  th:action="@{'/parent/children/' + ${child.id} + '/goal'}"
+                                  method="post">
+                                <input type="hidden" name="type" value="ALPHABET"/>
+                                <!-- ✅ FIX: th:value -->
+                                <input type="number" name="goalCount" min="1" th:value="${child.alphabetGoal}"/>
+                                <button type="submit" class="ghost-button small-btn">Update Goal</button>
+                            </form>
+
+                            <a class="ghost-button"
+                               th:href="@{'/parent/children/' + ${child.id} + '/progress?type=ALPHABET'}">
+                                View Alphabet Progress
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="child-actions">
+                        <a class="start-learning-btn"
+                           th:href="@{/child/login}">
+                            Start Learning
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= RIGHT: ADD CHILD + REWARDS ================= -->
+        <section class="add-child-section">
+
+            <h3>Add New Child</h3>
+
+            <div class="form-card">
+                <form th:action="@{/parent/children/add}" th:object="${newChild}" method="post">
+
+                    <div class="form-group">
+                        <label>Child Name</label>
+                        <input type="text" th:field="*{childName}" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" th:field="*{age}" min="1" required/>
+                    </div>
+
+                    <button type="submit" class="primary-button">Add Child</button>
+                </form>
+            </div>
+
+            <h3>Reward Videos</h3>
+
+            <div class="form-card reward-card">
+
+                <div class="table-wrapper">
+                    <table class="reward-table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>URL</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(rewardVideos)}">
+                            <td colspan="4">No reward videos yet.</td>
+                        </tr>
+
+                        <tr th:each="v, iter : ${rewardVideos}">
+                            <td th:text="${iter.count}"></td>
+                            <td th:text="${v.title}"></td>
+                            <td>
+                                <a th:href="${v.url}" target="_blank" th:text="${v.url}"></a>
+                            </td>
+                            <td>
+                                <form th:action="@{'/parent/reward-videos/' + ${v.id} + '/delete'}" method="post">
+                                    <button type="submit" class="danger-button small-btn">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <form th:action="@{/parent/reward-videos/add}"
+                      th:object="${newRewardVideo}"
+                      method="post"
+                      class="add-video-form">
+                    <input type="text" th:field="*{title}" placeholder="Video title (optional)"/>
+                    <input type="text" th:field="*{url}" placeholder="YouTube URL"/>
+                    <select th:field="*{learningType}">
+                        <option value="NUMBER">Number</option>
+                        <option value="ALPHABET">Alphabet</option>
+                    </select>
+                    <button type="submit" class="primary-button">Add Video</button>
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

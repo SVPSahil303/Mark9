@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Canvas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div class="container1">
+    <section class="tools-board">
+        <div class="row">
+            <label class="title">Options</label>
+            <ul class="options">
+                <li class="option active tool" id="brush">
+                    <span>Brush</span>
+                </li>
+                <li class="option tool" id="eraser">
+                    <span>Eraser</span>
+                </li>
+                <li class="option">
+                    <input type="range" id="size-slider" min="1" max="30" value="5">
+                </li>
+            </ul>
+        </div>
+        <div class="row colors">
+            <label class="title">Colors</label>
+            <ul class="options">
+                <li class="option selected" style="background:#000;"></li>
+                <li class="option" style="background:#E02020;"></li>
+                <li class="option" style="background:#6DD400;"></li>
+                <li class="option" style="background:#4A98F7;"></li>
+                <li class="option">
+                    <input type="color" id="color-picker" value="#4A98F7">
+                </li>
+            </ul>
+        </div>
+        <div class="row buttons">
+            <button class="clear-canvas" accesskey="q">Clear Canvas</button>
+            <button class="save-img" accesskey="w">Save As Image</button>
+            <button class="predict-img">Predict</button>
+        </div>
+        <div>
+            <form th:action="@{/send-email}" method="post">
+            <!-- CSRF token is automatically rendered by Thymeleaf + Spring Security if using it.
+                If you are not using Spring Security, this will just post normally. -->
+            <button type="submit" class="btn">Send Email</button>
+            </form>
+            
+            <div th:if="${message}" class="msg success" th:text="${message}"></div>
+            <div th:if="${error}" class="msg error" th:text="${error}"></div>
+        </div>
+    </section>
+    <section class="drawing-board">
+        <canvas></canvas>
+    </section>
+</div>
+<!-- Flash message popup -->
+<div th:if="${prediction}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Hi!',
+                text: 'your prediction is : [[${prediction}]]',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                showClass: { popup: 'animate__animated animate__fadeInDown' },
+                hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+            });
+        });
+    </script>
+</div>
+
+<script th:src="@{/js/canvas_test.js}"></script>
+</body>
+</html>

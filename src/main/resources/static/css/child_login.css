@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-family: "Baloo 2", system-ui, sans-serif;
+    background: linear-gradient(135deg, #2563eb, #10b981);
+    position: relative;
+    overflow: hidden;
+}
+
+/* soft glows behind everything */
+body::before,
+body::after {
+    content: "";
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 60%);
+    opacity: 0.5;
+    animation: floatSoft 16s ease-in-out infinite alternate;
+}
+
+body::before {
+    top: -200px;
+    left: -140px;
+}
+body::after {
+    bottom: -220px;
+    right: -160px;
+    animation-delay: 3s;
+}
+
+@keyframes floatSoft {
+    0%   { transform: translate(0,0) scale(1); }
+    100% { transform: translate(28px,24px) scale(1.06); }
+}
+
+/* ===== Shell ===== */
+
+.child-login-shell {
+    width: 100%;
+    max-width: 430px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== Floating cartoon scene (no images) ===== */
+
+.floating-scene {
+    position: relative;
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+/* big planet */
+.planet {
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #facc15, #f97316);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* orbit ring */
+.orbit {
+    position: absolute;
+    bottom: 40px;
+    left: 20px;
+    width: 140px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.7);
+    transform: rotate(-12deg);
+    opacity: 0.9;
+}
+
+/* rocket made from pure CSS */
+.rocket {
+    position: absolute;
+    bottom: 50px;
+    left: 130px;
+    width: 40px;
+    height: 70px;
+    background: #ffffff;
+    border-radius: 20px 20px 6px 6px;
+    box-shadow: 0 6px 14px rgba(15,23,42,0.4);
+    animation: rocketFloat 3s ease-in-out infinite;
+}
+
+/* nose */
+.rocket::before {
+    content: "";
+    position: absolute;
+    top: -18px;
+    left: 8px;
+    width: 24px;
+    height: 24px;
+    background: #0ea5e9;
+    transform: rotate(45deg);
+    border-radius: 4px;
+}
+
+/* window */
+.rocket::after {
+    content: "";
+    position: absolute;
+    top: 16px;
+    left: 11px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 3px solid #0ea5e9;
+}
+
+/* flames */
+.spark {
+    position: absolute;
+    bottom: 38px;
+    left: 140px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #f97316;
+    opacity: 0.9;
+    filter: blur(1px);
+}
+.spark-1 { animation: flame 0.6s infinite alternate; }
+.spark-2 { left: 150px; bottom: 32px; animation: flame 0.6s 0.2s infinite alternate; }
+.spark-3 { left: 135px; bottom: 28px; animation: flame 0.6s 0.4s infinite alternate; }
+
+@keyframes rocketFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+@keyframes flame {
+    0%   { transform: scale(1); opacity: 0.9; }
+    100% { transform: scale(1.6); opacity: 0.2; }
+}
+
+/* ===== Login Card ===== */
+
+.login-card {
+    background: rgba(255,255,255,0.97);
+    padding: 26px 26px 28px;
+    border-radius: 26px;
+    box-shadow: 0 14px 34px rgba(15,23,42,0.35);
+}
+
+/* Title & subtitle */
+.login-card h2 {
+    font-size: 1.9rem;
+    color: #111827;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: #6b7280;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+/* ===== Messages ===== */
+
+.error-msg,
+.success-msg {
+    padding: 8px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.error-msg {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.success-msg {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* ===== Form ===== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+label {
+    font-size: 0.95rem;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid #cbd5f5;
+    background: #f3f4ff;
+    outline: none;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #111827;
+    transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+input:focus {
+    border-color: #3b82f6;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.35);
+    transform: translateY(-1px);
+}
+
+/* ===== Button ===== */
+
+.primary-button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 11px 0;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    background: linear-gradient(135deg, #facc15, #f97316);
+    color: #111827;
+    box-shadow: 0 10px 22px rgba(248, 150, 30, 0.75);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.2s ease;
+    font-family: inherit;
+}
+
+.primary-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(248, 150, 30, 0.9);
+    filter: brightness(1.03);
+}
+
+.primary-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 8px 18px rgba(248, 150, 30, 0.9);
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 480px) {
+    .child-login-shell {
+        max-width: 360px;
+    }
+    .floating-scene {
+        height: 130px;
+    }
+}

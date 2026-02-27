@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Parent Login</title>
+
+    <!-- Link to CSS -->
+    <link rel="stylesheet" th:href="@{/css/parent_login.css}">
+
+    <!-- Lottie Player (JS) -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    
+
+</head>
+<body>
+
+<h2>Parent Login</h2>
+
+<!-- Error message -->
+<div th:if="${param.error}" class="message-bubble message-error">
+    <p>Invalid email or password</p>
+</div>
+
+<!-- Success / registration message -->
+<div th:if="${param.registered}" class="message-bubble message-success">
+    <p>Registration successful! Please login.</p>
+</div>
+
+<form th:action="@{/login}" method="post">
+    <label>Email:</label>
+    <input type="text" name="username" required/><br/>
+
+    <label>Password:</label>
+    <input type="password" name="password" required/><br/>
+
+    <button type="submit">Login</button>
+</form>
+
+<p>Don't have an account? <a th:href="@{/register}">Register</a></p>
+
+<!-- Lottie animation in bottom-right corner -->
+<!-- Kid Learning Animation -->
+<lottie-player
+    src="https://assets9.lottiefiles.com/packages/lf20_5mygvh3h.json"
+    background="transparent"
+    speed="1"
+    class="kid-lottie"
+    loop
+    autoplay>
+</lottie-player>
+
+<!-- Rocket Animation -->
+<lottie-player
+    src="https://assets2.lottiefiles.com/packages/lf20_qwl4gi2d.json"
+    background="transparent"
+    speed="1"
+    class="rocket-lottie"
+    loop
+    autoplay>
+</lottie-player>
+<lottie-player src="https://lottie.host/abc123/animation.json" ...></lottie-player>
+
+</body>
+</html>

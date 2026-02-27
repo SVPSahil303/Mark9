@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="'Progress of ' + ${child.childName}">Child Progress</title>
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      height: auto;
+      overflow-y: auto !important;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #f6f9ff, #e4f3ff);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .progress-container {
+      width: 92%;
+      max-width: 1400px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px 30px 30px;
+      box-shadow: 0 18px 40px rgba(15, 35, 95, 0.11);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .progress-header h2 { margin: 0; }
+    .progress-header p { margin: 4px 0 0; color: #555; }
+
+    .back-btn {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: #4A98F7;
+      color: white;
+      text-decoration: none;
+      font-size: 0.9rem;
+      box-shadow: 0 6px 14px rgba(74, 152, 247, 0.5);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+    .back-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(74, 152, 247, 0.5);
+    }
+
+    .mode-switch {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .mode-switch a {
+      padding: 8px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      border: 1px solid #4A98F7;
+      transition: transform .12s ease;
+    }
+    .mode-switch a:hover { transform: translateY(-1px); }
+    .mode-active { background: #4A98F7; color: #fff; }
+    .mode-inactive { color: #4A98F7; background: #fff; }
+
+    .stats-grid {
+      display: flex;
+      gap: 15px;
+      margin: 20px 0 25px;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1 1 170px;
+      background: linear-gradient(135deg, #f7f9ff, #edf2ff);
+      border-radius: 18px;
+      padding: 14px 16px;
+      border: 1px solid rgba(120, 136, 255, 0.15);
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: #667;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-value {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #1c2a4a;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    .chart-card {
+      background: #fdfdff;
+      border-radius: 18px;
+      padding: 16px 18px 20px;
+      border: 1px solid rgba(180, 190, 255, 0.4);
+    }
+    .chart-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .chart-subtitle { font-size: 0.8rem; color: #777; margin-bottom: 6px; }
+    .chart-wrapper { position: relative; height: 240px; }
+
+    h3 { margin-top: 10px; margin-bottom: 8px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+      font-size: 0.92rem;
+      background: #fafbff;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    th, td {
+      border-bottom: 1px solid #ecefff;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    th { background: #eef2ff; }
+    tr:last-child td { border-bottom: none; }
+
+    .tag-correct { color: #0a8754; font-weight: 700; }
+    .tag-wrong { color: #d93025; font-weight: 700; }
+
+    .empty-state {
+      padding: 26px 15px;
+      text-align: center;
+      color: #666;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.6);
+      border: 1px dashed rgba(120, 136, 255, 0.25);
+      margin: 18px 0;
+    }
+    .empty-state img {
+      max-width: 170px;
+      margin-bottom: 10px;
+      opacity: 0.95;
+    }
+  </style>
+</head>
+
+<body>
+<div class="progress-container">
+
+  <div class="progress-header">
+    <div>
+      <h2 th:text="${child.childName} + ' – Progress'">Child Progress</h2>
+      <p th:text="'Parent: ' + ${parent.fullName}">Parent</p>
+    </div>
+    <a th:href="@{/parent/dashboard}" class="back-btn">⬅ Back to Dashboard</a>
+  </div>
+
+  <div class="mode-switch">
+    <a th:href="@{'/parent/children/' + ${child.id} + '/progress?type=NUMBER'}"
+       th:classappend="${learningType.name() == 'NUMBER'} ? ' mode-active' : ' mode-inactive'">
+      📊 Numbers
+    </a>
+
+    <a th:href="@{'/parent/children/' + ${child.id} + '/progress?type=ALPHABET'}"
+       th:classappend="${learningType.name() == 'ALPHABET'} ? ' mode-active' : ' mode-inactive'">
+      🔤 Alphabets
+    </a>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Attempts</div>
+      <div class="stat-value" th:text="${totalAttempts}">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Correct Attempts</div>
+      <div class="stat-value" th:text="${correctCount}">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Accuracy</div>
+      <div class="stat-value">
+        <span th:text="${#numbers.formatDecimal(accuracy, 1, 1)} + ' %'">0 %</span>
+      </div>
+    </div>
+
+    <!-- FIXED: null-safe avg time -->
+    <div class="stat-card">
+      <div class="stat-label">Avg Time per Attempt (s)</div>
+      <div class="stat-value"
+           th:text="${avgTimeMs == null ? '0.0' : #numbers.formatDecimal(avgTimeMs/1000.0, 1, 1)}">0.0</div>
+    </div>
+  </div>
+
+  <div th:if="${#lists.isEmpty(progressList)}" class="empty-state">
+    <img src="https://cdn-icons-png.flaticon.com/512/4072/4072819.png" alt="No data">
+    <p>No attempts yet. Once your child starts practicing, charts and history will appear here.</p>
+  </div>
+
+  <div th:if="${!#lists.isEmpty(progressList)}">
+    <div class="charts-grid">
+
+      <div class="chart-card">
+        <div class="chart-title">Overall Performance</div>
+        <div class="chart-subtitle">Correct vs wrong attempts</div>
+        <div class="chart-wrapper">
+          <canvas id="correctWrongChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title"
+             th:text="${learningType.name() == 'NUMBER'} ? 'Accuracy Per Digit' : 'Accuracy Per Alphabet'">
+          Accuracy Per Symbol
+        </div>
+        <div class="chart-subtitle">Find weak areas that need more practice</div>
+        <div class="chart-wrapper">
+          <canvas id="accuracyChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">Time Taken Per Attempt</div>
+        <div class="chart-subtitle">Is the child getting faster over time?</div>
+        <div class="chart-wrapper">
+          <canvas id="timeChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <h3>Attempt History</h3>
+  <table>
+    <thead>
+    <tr>
+      <th>#</th>
+      <th th:text="${learningType.name() == 'NUMBER'} ? 'Digit' : 'Alphabet'">Symbol</th>
+      <th>Correct?</th>
+      <th>Time (ms)</th>
+      <th>Tab Switches</th>
+      <th>Attempted At</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(progressList)}">
+      <td colspan="6">No attempts yet.</td>
+    </tr>
+
+    <tr th:each="p, iter : ${progressList}">
+      <td th:text="${iter.count}">1</td>
+      <td th:text="${p.symbol}">0</td>
+      <td>
+        <span th:if="${p.correct}" class="tag-correct">Correct ✅</span>
+        <span th:if="${!p.correct}" class="tag-wrong">Wrong ❌</span>
+      </td>
+      <td th:text="${p.timeTakenMs}">0</td>
+      <td th:text="${p.tabSwitchCount}">0</td>
+      <td th:text="${#temporals.format(p.attemptedAt, 'dd MMM yyyy HH:mm')}">time</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+  const symbols = [];
+  const correctArr = [];
+  const timeArr = [];
+
+  /*[# th:each="p : ${progressList}"]*/
+    symbols.push('[[${p.symbol}]]');
+    correctArr.push([[${p.correct} ? 1 : 0]]);
+    timeArr.push([[${p.timeTakenMs} ?: 0]]);
+  /*[/]*/
+
+  if (symbols.length > 0) {
+
+    const total = correctArr.length;
+    const correctCount = correctArr.filter(v => v === 1).length;
+    const wrongCount = total - correctCount;
+
+    const ctx1 = document.getElementById("correctWrongChart").getContext("2d");
+    new Chart(ctx1, {
+      type: "doughnut",
+      data: {
+        labels: ["Correct", "Wrong"],
+        datasets: [{ data: [correctCount, wrongCount] }]
+      },
+      options: {
+        plugins: { legend: { position: "bottom" } },
+        cutout: "60%"
+      }
+    });
+
+    const stats = {};
+    for (let i = 0; i < symbols.length; i++) {
+      const s = symbols[i];
+      if (!stats[s]) stats[s] = { attempts: 0, correct: 0 };
+      stats[s].attempts++;
+      if (correctArr[i] === 1) stats[s].correct++;
+    }
+
+    const isNumberMode = /*[[${learningType.name() == 'NUMBER'}]]*/ true;
+
+    const labels = Object.keys(stats).sort((a, b) => {
+      if (isNumberMode) return Number(a) - Number(b);
+      return a.localeCompare(b);
+    });
+
+    const accuracyData = labels.map(s => {
+      const st = stats[s];
+      return st.attempts === 0 ? 0 : (st.correct * 100.0 / st.attempts);
+    });
+
+    const ctx2 = document.getElementById("accuracyChart").getContext("2d");
+    new Chart(ctx2, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{ label: "Accuracy (%)", data: accuracyData }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true, max: 100 } },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    const attemptLabels = timeArr.map((_, i) => i + 1);
+
+    const ctx3 = document.getElementById("timeChart").getContext("2d");
+    new Chart(ctx3, {
+      type: "line",
+      data: {
+        labels: attemptLabels,
+        datasets: [{ label: "Time (ms)", data: timeArr, tension: 0.25, fill: false }]
+      },
+      options: {
+        plugins: { legend: { position: "bottom" } },
+        scales: {
+          x: { title: { display: true, text: "Attempt #" } },
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
+/*]]>*/
+</script>
+
+</body>
+</html>

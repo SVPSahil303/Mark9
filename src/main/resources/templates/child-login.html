@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Child Login</title>
+    <link rel="stylesheet" th:href="@{/css/child_login.css}">
+</head>
+<body>
+
+<div class="child-login-shell">
+
+    <!-- Cartoon animated scene -->
+    <div class="floating-scene">
+        <div class="planet"></div>
+        <div class="orbit"></div>
+        <div class="rocket"></div>
+        <div class="spark spark-1"></div>
+        <div class="spark spark-2"></div>
+        <div class="spark spark-3"></div>
+    </div>
+
+    <div class="login-card">
+        <h2>Child Login</h2>
+        <p class="subtitle">Enter your details to start learning!</p>
+
+        <!-- Error message -->
+        <div th:if="${error}" class="error-msg">
+            <p th:text="${error}"></p>
+        </div>
+
+        <!-- Logout success -->
+        <div th:if="${param.logout}" class="success-msg">
+            <p>Logged out successfully.</p>
+        </div>
+
+        <form th:action="@{/child/login}" method="post">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" required/>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required/>
+            </div>
+
+            <button type="submit" class="primary-button">
+                Start Learning 🚀
+            </button>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

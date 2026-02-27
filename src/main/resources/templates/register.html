@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Parent Registration</title>
+    <!-- reuse the SAME css file as your parent login page -->
+    <link rel="stylesheet" th:href="@{/css/parent_login.css}">
+     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body>
+
+<h2>Parent Registration</h2>
+
+<!-- Error message (styled like login using message-bubble) -->
+<div th:if="${error}" class="message-bubble message-error">
+    <p th:text="${error}"></p>
+</div>
+
+<!-- Optional success message (if you ever set it from controller) -->
+<div th:if="${success}" class="message-bubble message-success">
+    <p th:text="${success}"></p>
+</div>
+
+<form th:action="@{/register}" method="post" th:object="${parent}">
+    <label>Full Name</label>
+    <input type="text" th:field="*{fullName}" placeholder="Enter your full name" required/>
+
+    <label>Phone Number</label>
+    <input type="text" th:field="*{phone}" placeholder="Enter your phone number" required/>
+
+    <label>Email</label>
+    <input type="email" th:field="*{email}" placeholder="Enter your email" required/>
+
+    <label>Password</label>
+    <input type="password" th:field="*{password}" placeholder="Create a password" required/>
+
+    <label>Confirm Password</label>
+    <input type="password" th:field="*{confirmPassword}" placeholder="Re-enter password" required/>
+
+    <button type="submit">Register</button>
+</form>
+
+<p>Already have an account? <a th:href="@{/login}">Login</a></p>
+
+
+
+
+
+<!-- Rocket Animation -->
+<lottie-player
+    src="https://assets2.lottiefiles.com/packages/lf20_qwl4gi2d.json"
+    background="transparent"
+    speed="1"
+    class="rocket-lottie"
+    loop
+    autoplay>
+</lottie-player>
+
+
+
+</body>
+</html>
