@@ -201,72 +201,55 @@ function predictSymbol() {
   const imageData = canvas.toDataURL("image/png");
 
   if (currentLearningType === "NUMBER") {
-        fetch("https://ml-webservice.onrender.com/predict", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ image: imageData })
-        })
-        .then((res) => res.json())
-        .then((data) => {
+    fetch("https://ml-webservice.onrender.com/predict", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: imageData })
+    })
+      .then((res) => res.json())
+      .then((data) => {
         if (data && data.result !== undefined && data.result !== null) {
-            const predicted = normalizePrediction(data.result);
-            handlePrediction(predicted);
+          const predicted = normalizePrediction(data.result);
+          handlePrediction(predicted);
         } else {
-            throw new Error(data?.error || "Prediction failed");
+          throw new Error(data?.error || "Prediction failed");
         }
-        })
-        .catch((err) => {
-        console.error("Prediction error:", err);
-        Swal.fire({
-            title: "Error",
-            text: "Prediction failed. Please try again.",
-            icon: "error"
-        });
-        });
-    } else {
-    // For alphabets
-    fetch("https://ml-webservice.onrender.com/predict_alpha", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: imageData })
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data && data.result !== undefined && data.result !== null) {
-        const predicted = normalizePrediction(data.result);
-        handlePrediction(predicted);
-      } else {
-        throw new Error(data?.error || "Prediction failed");
-      }
-    })
-    .catch((err) => {
-      console.error("Prediction error:", err);
-      Swal.fire({
-        title: "Error",
-        text: "Prediction failed. Please try again.",
-        icon: "error"
+      })
+      .catch(() => {
+        Swal.fire("Error", "Prediction failed. Try again.", "error");
       });
-    });
+  } else {
+    fetch("https://ml-webservice.onrender.com/predict_alpha", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: imageData })
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.result !== undefined && data.result !== null) {
+          const predicted = normalizePrediction(data.result);
+          handlePrediction(predicted);
+        } else {
+          throw new Error(data?.error || "Prediction failed");
+        }
+      })
+      .catch(() => {
+        Swal.fire("Error", "Prediction failed. Try again.", "error");
+      });
   }
-
-  
 }
 
 function normalizePrediction(value) {
-  // If NUMBER mode: keep only digit "0-9"
-  // If ALPHABET mode: "A-Z"
   const s = String(value).trim();
 
   if (currentLearningType === "NUMBER") {
-    // Extract first digit
     const match = s.match(/[0-9]/);
     return match ? match[0] : s;
   } else {
-    // Extract first letter
     const match = s.toUpperCase().match(/[A-Z]/);
     return match ? match[0] : s.toUpperCase();
   }
-}
+} 
 
 // ============================
 // HANDLE RESULT
@@ -279,26 +262,25 @@ async function handlePrediction(predicted) {
     await sendProgressToServer(true);
   } else {
     await sendProgressToServer(false);
-    Swal.fire({
-      title: "Try Again!",
-      html: `<p>You drew <b>${got}</b>, expected <b>${expected}</b>.</p>`,
-      icon: "error",
-      confirmButtonText: "OK"
-    });
+    Swal.fire("Try Again!", `You drew ${got}, expected ${expected}.`, "error");
   }
 }
+
 
 // ============================
 // SEND PROGRESS (Spring Boot)
 // Matches your backend controller ProgressController.saveProgress()
+// ============================
+// ============================
+// SEND PROGRESS (FIXED)
 // ============================
 async function sendProgressToServer(correct) {
   const timeTakenMs = Date.now() - attemptStartTime;
 
   const params = new URLSearchParams({
     symbol: String(currentSymbol),
-    learningType: String(currentLearningType), // must be NUMBER / ALPHABET
-    correct: String(correct),                  // "true"/"false"
+    learningType: String(currentLearningType),
+    correct: String(correct),
     timeTakenMs: String(timeTakenMs),
     tabSwitchCount: String(tabSwitchCount)
   });
@@ -310,20 +292,14 @@ async function sendProgressToServer(correct) {
       body: params.toString()
     });
 
-    if (!res.ok) throw new Error("Progress save failed: " + res.status);
-
     const data = await res.json();
-    console.log("Progress response:", data);
-
-    // Reset attempt tracking after server call
     resetAttemptTracking();
 
-    // If incorrect, backend returns { goalAchieved:false } only
     if (!correct) return;
 
-    // Goal achieved branch
+    // 🎯 GOAL ACHIEVED (FIXED: NO RESET)
     if (data.goalAchieved === true) {
-      if (typeof confetti === "function") confetti(); // prevent crash if confetti not loaded
+      if (typeof confetti === "function") confetti();
 
       await Swal.fire({
         title: "🎉 Goal Completed!",
@@ -332,20 +308,18 @@ async function sendProgressToServer(correct) {
         confirmButtonText: "Watch Reward"
       });
 
-      // Show reward popup and WAIT until user closes it
       await showRewardVideo();
 
-      // Backend sends nextStartSymbol ("0" or "A")
-      currentSymbol = safeSymbol(data.nextStartSymbol);
-
+      currentSymbol = safeSymbol(data.nextSymbol);
       clearCanvasManually();
       showDemoVideo(currentSymbol);
+      // 🔥 Reload page so backend state is used
+      window.location.reload();
       return;
     }
 
-    // Normal correct flow: backend sends nextSymbol (or null)
+    // Normal flow
     const next = safeSymbol(data.nextSymbol);
-
     if (!next) {
       showCompletionPopup();
       return;
@@ -353,27 +327,20 @@ async function sendProgressToServer(correct) {
 
     currentSymbol = next;
 
-    await Swal.fire({
-      title: "Correct!",
-      icon: "success",
-      confirmButtonText: "Next"
-    });
-
+    await Swal.fire("Correct!", "", "success");
     clearCanvasManually();
     showDemoVideo(currentSymbol);
 
-  } catch (err) {
-    console.error(err);
-    // session expired / not logged in
+  } catch {
     window.location.href = "/child/login";
   }
 }
 
+
 function safeSymbol(v) {
-  if (v === null || v === undefined) return null;
+  if (!v) return null;
   const s = String(v).trim();
-  if (!s || s === "null" || s === "undefined") return null;
-  return s.toUpperCase();
+  return s ? s.toUpperCase() : null;
 }
 
 // ============================

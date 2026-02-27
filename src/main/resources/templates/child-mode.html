@@ -1,86 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Choose Learning Mode</title>
-    <link rel="stylesheet" th:href="@{/css/child_mode.css}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  <title>Mission Control</title>
+  <link rel="stylesheet" th:href="@{/css/child_mode.css}">
 </head>
+
 <body>
+<div class="scene">
 
-<div class="space-bg">
-    <!-- Stars + planets + rocket are pure CSS -->
-    <div class="stars"></div>
-    <div class="twinkles"></div>
+  <!-- Background layers -->
+  <div class="bg-stars"></div>
+  <div class="bg-glow left"></div>
+  <div class="bg-glow right"></div>
 
-    <div class="planet planet-1"></div>
-    <div class="planet planet-2"></div>
-    <div class="planet planet-3"></div>
+  <!-- Main Control Panel -->
+  <main class="control-panel">
 
-    <div class="comet comet-1"></div>
-    <div class="comet comet-2"></div>
+    <!-- Header -->
+    <header class="panel-header">
+      <div>
+        <h1 th:text="'Hi, ' + ${child.childName} + ' 👋'">Hi!</h1>
+        <p>Choose your next mission</p>
+      </div>
+      <a th:href="@{/child/logout}" class="logout">Logout</a>
+    </header>
 
-    <!-- Floating rocket -->
-    <div class="rocket" aria-hidden="true">
-        <div class="rocket-body"></div>
-        <div class="rocket-window"></div>
-        <div class="rocket-fin left"></div>
-        <div class="rocket-fin right"></div>
-        <div class="rocket-flame"></div>
-        <div class="rocket-smoke"></div>
-    </div>
-
-    <div class="mode-card animate__animated animate__fadeInUp">
-
-        <div class="top-row">
-            <div>
-                <h2 class="hello" th:text="'Hi, ' + ${child.childName} + ' 👋'">Hi!</h2>
-                <p class="sub">Choose what you want to practice today</p>
-            </div>
-
-            <a class="tiny-logout" th:href="@{/child/logout}">Logout</a>
+    <!-- Mascot -->
+    <section class="mascot-zone">
+      <div class="mascot">
+        <div class="face">
+          <span class="eye left"></span>
+          <span class="eye right"></span>
+          <span class="mouth"></span>
         </div>
+      </div>
+      <div class="speech">Let’s learn something fun today 🚀</div>
+    </section>
 
-        <!-- Cute astronaut mascot -->
-        <div class="mascot-wrap" aria-hidden="true">
-            <div class="mascot-shadow"></div>
-            <div class="astro">
-                <div class="astro-face">
-                    <span class="eye left"></span>
-                    <span class="eye right"></span>
-                    <span class="mouth"></span>
-                </div>
-                <div class="astro-gloss"></div>
-            </div>
-            <div class="mascot-text">Pick a mission! 🚀</div>
-        </div>
+    <!-- Missions -->
+    <section class="missions">
 
-        <div class="modes">
-            <a class="mode-btn numbers"
-               th:href="@{/child/learn(type='NUMBER')}">
-                <div class="badge">Mission 01</div>
-                <div class="emoji">📊</div>
-                <div class="title">Numbers</div>
-                <div class="subtitle">0, 1, 2, 3...</div>
-                <div class="cta">Start Counting →</div>
-                <div class="sparkles" aria-hidden="true"></div>
-            </a>
+      <a class="mission-card numbers" th:href="@{/child/learn(type='NUMBER')}">
+        <div class="mission-tag">MISSION 01</div>
+        <div class="mission-icon">🔢</div>
+        <h2>Numbers</h2>
+        <p>0, 1, 2, 3...</p>
+        <span class="start">Start Mission →</span>
+      </a>
 
-            <a class="mode-btn alphabets"
-               th:href="@{/child/learn(type='ALPHABET')}">
-                <div class="badge">Mission 02</div>
-                <div class="emoji">🔤</div>
-                <div class="title">Alphabets</div>
-                <div class="subtitle">A, B, C, D...</div>
-                <div class="cta">Start Letters →</div>
-                <div class="sparkles" aria-hidden="true"></div>
-            </a>
-        </div>
+      <a class="mission-card alphabets" th:href="@{/child/learn(type='ALPHABET')}">
+        <div class="mission-tag">MISSION 02</div>
+        <div class="mission-icon">🔤</div>
+        <h2>Alphabets</h2>
+        <p>A, B, C, D...</p>
+        <span class="start">Start Mission →</span>
+      </a>
 
-        <div class="footer-note">
-            🌟 Tip: Hover on a card to see magic sparkles!
-        </div>
+    </section>
 
-    </div>
+  </main>
 </div>
 
 <script th:src="@{/js/child_mode.js}"></script>
