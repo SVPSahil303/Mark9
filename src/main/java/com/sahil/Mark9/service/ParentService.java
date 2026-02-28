@@ -62,9 +62,11 @@ public class ParentService {
     public boolean checkPin(String pin,Parent parent){
         if(passwordEncoder.matches(pin, parent.getPinHash())){
             return true;
+            
         }else{
             return false;
         }
+
     }
 
     public String encodePin(String rawPin) {
