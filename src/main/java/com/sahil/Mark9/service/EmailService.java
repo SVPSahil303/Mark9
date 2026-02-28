@@ -21,4 +21,19 @@ public class EmailService {
         msg.setText(text);
         mailSender.send(msg);
     }
+
+    public void sendOtp(String to, String otp) {
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(to);
+        msg.setSubject("Parent PIN Reset OTP");
+        msg.setText("""
+                Your OTP for Parent PIN reset is: %s
+
+                This OTP is valid for 5 minutes.
+                If you did not request this, ignore this email.
+                """.formatted(otp));
+
+        mailSender.send(msg);
+    }
 }

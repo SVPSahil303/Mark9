@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Verify OTP</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div style="max-width:420px;margin:80px auto;padding:24px;border:1px solid #ccc;border-radius:10px;">
+
+    <h2 style="text-align:center;">Verify OTP 📩</h2>
+    <p style="text-align:center;color:#555;">
+        Enter the OTP sent to your email
+    </p>
+
+    <form method="post" action="/parent/pin/reset/verify-otp">
+
+        <!-- Hidden email -->
+        <input type="hidden" name="email" th:value="${email}" />
+
+        <label>OTP</label><br>
+        <input type="text"
+               name="otp"
+               placeholder="6-digit OTP"
+               required
+               style="width:100%;padding:10px;margin-top:6px;margin-bottom:12px;"/>
+
+        <button type="submit"
+                style="width:100%;padding:10px;font-weight:bold;">
+            Verify OTP
+        </button>
+
+        <p th:if="${error}"
+           style="color:red;text-align:center;margin-top:10px;">
+            Invalid or expired OTP
+        </p>
+
+    </form>
+
+</div>
+
+</body>
+</html>

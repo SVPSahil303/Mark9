@@ -32,80 +32,80 @@
             <div th:if="${!#lists.isEmpty(children)}" class="children-grid">
                 <div class="child-card" th:each="child : ${children}">
 
-    <!-- ===== HEADER ROW ===== -->
-    <div class="child-card-header">
+                    <!-- ===== HEADER ROW ===== -->
+                    <div class="child-card-header">
 
-        <div class="child-info">
-            <div class="child-avatar">
-                <span th:text="${child.childName != null ? child.childName.substring(0,1) : '?'}">S</span>
-            </div>
+                        <div class="child-info">
+                            <div class="child-avatar">
+                                <span th:text="${child.childName != null ? child.childName.substring(0,1) : '?'}">S</span>
+                            </div>
 
-            <div class="child-name-age">
-                <h4 th:text="${child.childName}">sam</h4>
-                <span th:text="'Age ' + ${child.age}">Age 10</span>
-            </div>
-        </div>
+                            <div class="child-name-age">
+                                <h4 th:text="${child.childName}">sam</h4>
+                                <span th:text="'Age ' + ${child.age}">Age 10</span>
+                            </div>
+                        </div>
 
-        <a class="start-learning-btn"
-           th:href="@{/child/login}">
-            ▶ Start Learning
-        </a>
+                        <a class="start-learning-btn"
+                        th:href="@{/child/login}">
+                            ▶ Start Learning
+                        </a>
 
-    </div>
+                    </div>
 
-    <!-- ===== LEARNING ROW ===== -->
-    <div class="child-card-body">
+                    <!-- ===== LEARNING ROW ===== -->
+                    <div class="child-card-body">
 
-        <!-- NUMBERS -->
-        <div class="learning-block number-block">
-            <h5>📊 Numbers</h5>
+                        <!-- NUMBERS -->
+                        <div class="learning-block number-block">
+                            <h5>📊 Numbers</h5>
 
-            <p class="learning-meta">
-                Learned <b th:text="${child.totalDigitsLearned}">3</b> /
-                Goal <b th:text="${child.digitGoal}">5</b>
-            </p>
+                            <p class="learning-meta">
+                                Learned <b th:text="${child.totalDigitsLearned}">3</b> /
+                                Goal <b th:text="${child.digitGoal}">5</b>
+                            </p>
 
-            <form class="goal-form"
-                  th:action="@{'/parent/children/' + ${child.id} + '/goal'}"
-                  method="post">
-                <input type="hidden" name="type" value="NUMBER"/>
-                <input type="number" name="goalCount" min="1"
-                       th:value="${child.digitGoal}"/>
-                <button class="ghost-button small-btn">Update</button>
-            </form>
+                            <form class="goal-form"
+                                th:action="@{'/parent/children/' + ${child.id} + '/goal'}"
+                                method="post">
+                                <input type="hidden" name="type" value="NUMBER"/>
+                                <input type="number" name="goalCount" min="1"
+                                    th:value="${child.digitGoal}"/>
+                                <button class="ghost-button small-btn">Update</button>
+                            </form>
 
-            <a class="ghost-button"
-               th:href="@{'/parent/children/' + ${child.id} + '/progress?type=NUMBER'}">
-                View Progress
-            </a>
-        </div>
+                            <a class="ghost-button"
+                            th:href="@{'/parent/children/' + ${child.id} + '/progress?type=NUMBER'}">
+                                View Progress
+                            </a>
+                        </div>
 
-        <!-- ALPHABETS -->
-        <div class="learning-block alphabet-block">
-            <h5>🔤 Alphabets</h5>
+                        <!-- ALPHABETS -->
+                        <div class="learning-block alphabet-block">
+                            <h5>🔤 Alphabets</h5>
 
-            <p class="learning-meta">
-                Learned <b th:text="${child.totalAlphabetsLearned}">10</b> /
-                Goal <b th:text="${child.alphabetGoal}">15</b>
-            </p>
+                            <p class="learning-meta">
+                                Learned <b th:text="${child.totalAlphabetsLearned}">10</b> /
+                                Goal <b th:text="${child.alphabetGoal}">15</b>
+                            </p>
 
-            <form class="goal-form"
-                  th:action="@{'/parent/children/' + ${child.id} + '/goal'}"
-                  method="post">
-                <input type="hidden" name="type" value="ALPHABET"/>
-                <input type="number" name="goalCount" min="1"
-                       th:value="${child.alphabetGoal}"/>
-                <button class="ghost-button small-btn">Update</button>
-            </form>
+                            <form class="goal-form"
+                                th:action="@{'/parent/children/' + ${child.id} + '/goal'}"
+                                method="post">
+                                <input type="hidden" name="type" value="ALPHABET"/>
+                                <input type="number" name="goalCount" min="1"
+                                    th:value="${child.alphabetGoal}"/>
+                                <button class="ghost-button small-btn">Update</button>
+                            </form>
 
-            <a class="ghost-button"
-               th:href="@{'/parent/children/' + ${child.id} + '/progress?type=ALPHABET'}">
-                View Progress
-            </a>
-        </div>
+                            <a class="ghost-button"
+                            th:href="@{'/parent/children/' + ${child.id} + '/progress?type=ALPHABET'}">
+                                View Progress
+                            </a>
+                        </div>
 
-    </div>
-</div>
+                    </div>
+                </div>
             </div>
 
         </section>

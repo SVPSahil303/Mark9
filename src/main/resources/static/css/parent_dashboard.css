@@ -1,72 +1,411 @@
-/* ===============================
-   PREMIUM KIDS MODE (FINAL)
-   =============================== */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap');
 
-.soft-particle{
-  position: fixed;
-  width: 10px;
-  height: 10px;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Baloo 2", system-ui, sans-serif;
+  background: linear-gradient(135deg, #3f8efc, #29c7ac);
+  padding: 30px 40px;
+  overflow-x: hidden;
+}
+
+/* ================= HEADER ================= */
+
+.dashboard-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.dashboard-header h2 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.subtitle {
+  color: rgba(255,255,255,0.9);
+}
+
+.logout-btn {
+  background: #0f172a;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* ================= MAIN GRID ================= */
+
+.dashboard-main {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+}
+
+/* ================= SECTIONS ================= */
+
+.children-section h3,
+.add-child-section h3 {
+  color: white;
+  margin-bottom: 12px;
+}
+
+.children-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ================================================= */
+/* CHILD CARD — FINAL CLEAN VERSION */
+/* ================================================= */
+
+.child-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 20px 22px;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ---------- HEADER ---------- */
+
+.child-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.child-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.child-avatar {
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  box-shadow: 0 0 14px rgba(255,255,255,.6);
+  background: linear-gradient(135deg, #3f8efc, #22c55e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 1.05rem;
 }
 
-/* ---------- Mascot Emotion ---------- */
-.astro.happy{
-  animation: astroHappy .6s ease;
-}
-@keyframes astroHappy{
-  0%{ transform: scale(1); }
-  50%{ transform: scale(1.08) rotate(4deg); }
-  100%{ transform: scale(1); }
+.child-name-age {
+  display: flex;
+  flex-direction: column;
 }
 
-.astro.blink .eye{
-  animation: blinkFast .3s;
-}
-@keyframes blinkFast{
-  0%{ transform: scaleY(1); }
-  50%{ transform: scaleY(.1); }
-  100%{ transform: scaleY(1); }
+.child-name-age h4 {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #0f172a;
 }
 
-/* ---------- Card Depth ---------- */
-.mode-btn{
-  will-change: transform;
-  transform-style: preserve-3d;
+.child-name-age span {
+  font-size: 0.85rem;
+  color: #64748b;
 }
 
-.mode-btn .emoji{
-  transform: translateZ(40px);
+/* ---------- START BUTTON ---------- */
+
+.start-learning-btn {
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f97316, #facc15);
+  color: #111827;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 10px 22px rgba(248, 113, 22, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.mode-btn .title,
-.mode-btn .cta{
-  transform: translateZ(30px);
-}
-
-/* ---------- CTA feels like a button ---------- */
-.cta{
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-.mode-btn:hover .cta{
+.start-learning-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25);
+  box-shadow: 0 14px 30px rgba(248, 113, 22, 0.6);
 }
 
-/* ---------- Subtle idle glow ---------- */
-.mode-btn::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius: 32px;
-  box-shadow: inset 0 0 0 0 rgba(255,255,255,.4);
-  animation: idleGlow 4s ease-in-out infinite;
-  pointer-events:none;
+/* ---------- BODY ---------- */
+
+.child-card-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-@keyframes idleGlow{
-  0%,100%{ box-shadow: inset 0 0 0 0 rgba(255,255,255,.35); }
-  50%{ box-shadow: inset 0 0 30px 6px rgba(255,255,255,.35); }
+.learning-block {
+  background: #f8fbff;
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.number-block {
+  border-left: 5px solid #4A98F7;
+}
+
+.alphabet-block {
+  border-left: 5px solid #22c55e;
+}
+
+.learning-block h5 {
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.learning-meta {
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.goal-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.goal-form input {
+  width: 90px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid #c7d2fe;
+}
+
+.ghost-button {
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid #2563eb;
+  background: transparent;
+  color: #2563eb;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ================= RIGHT SIDE CARDS ================= */
+
+.form-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 14px 32px rgba(15,23,42,0.28);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.form-group input {
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid #cbd5f5;
+}
+
+.primary-button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 999px;
+  border: none;
+  background: #4A98F7;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* ================= REWARD TABLE ================= */
+
+.reward-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.reward-table th,
+.reward-table td {
+  padding: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.danger-button {
+  background: #ff4b6a;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+/* ============================================= */
+/* REWARD VIDEOS – TABLE + FORM (FINAL FIX) */
+/* ============================================= */
+
+.reward-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 18px 20px 22px;
+  box-shadow: 0 14px 32px rgba(15,23,42,0.28);
+}
+
+/* ---------- TABLE WRAPPER ---------- */
+.table-wrapper {
+  margin-top: 6px;
+  overflow-x: auto;
+}
+
+/* ---------- TABLE ---------- */
+.reward-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #f9fbff;
+  border-radius: 14px;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.reward-table thead th {
+  background: #eef2ff;
+  font-weight: 900;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 10px 12px;
+  color: #0f172a;
+}
+
+.reward-table tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+.reward-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* URL column */
+.reward-table .url-cell a {
+  font-weight: 800;
+  color: #2563eb;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Delete button */
+.reward-table .danger-button {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+/* ---------- ADD VIDEO FORM ---------- */
+.add-video-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.add-video-form input[type="text"] {
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid #ccd3ff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+/* Select */
+.add-video-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 10px 36px 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #ccd3ff;
+  background: #f3f4ff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Custom arrow */
+.add-video-form {
+  position: relative;
+}
+
+.add-video-form::after {
+  content: "▾";
+  position: absolute;
+  right: 78px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85rem;
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* Add button full width */
+.add-video-form .primary-button {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 600px) {
+  .add-video-form {
+    grid-template-columns: 1fr;
+  }
+
+  .add-video-form::after {
+    right: 20px;
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+  .dashboard-main {
+    grid-template-columns: 1fr;
+  }
+
+  .child-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .start-learning-btn {
+    align-self: stretch;
+    text-align: center;
+  }
+
+  .child-card-body {
+    grid-template-columns: 1fr;
+  }
 }

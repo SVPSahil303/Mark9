@@ -32,6 +32,7 @@ public class ParentService {
        parent.setEmail(dto.getEmail());
        parent.setPassword(passwordEncoder.encode(dto.getPassword()));
        parent.setPhone(dto.getPhone());
+       parent.setPinHash(encodePin("1234"));
 
        return parentRepository.save(parent);
     }
@@ -56,5 +57,17 @@ public class ParentService {
     public String generateRandomPassword() {
         // simple random password, you can make it stronger if you want
         return UUID.randomUUID().toString().substring(0, 8);
+    }
+
+    public boolean checkPin(String pin,Parent parent){
+        if(passwordEncoder.matches(pin, parent.getPinHash())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public String encodePin(String rawPin) {
+        return passwordEncoder.encode(rawPin);
     }
 }

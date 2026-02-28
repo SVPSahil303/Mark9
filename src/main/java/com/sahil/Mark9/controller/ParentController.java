@@ -5,6 +5,8 @@ import com.sahil.Mark9.repository.*;
 import com.sahil.Mark9.service.EmailService;
 import com.sahil.Mark9.service.ParentService;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,7 +47,7 @@ public class ParentController {
     // ================= DASHBOARD =================
 
     @GetMapping("/dashboard")
-    public String dashboard(Authentication authentication, Model model) {
+    public String dashboard(Authentication authentication, Model model,HttpSession session) {
 
         String email = authentication.getName();
         Parent parent = parentRepository.findByEmail(email).orElseThrow();
@@ -60,6 +62,31 @@ public class ParentController {
         model.addAttribute("newRewardVideo", new RewardVideo());
 
         return "parent-dashboard";
+    }
+
+    @GetMapping("/pin")
+    public String showPinPage(HttpSession session) {
+        Boolean verified = (Boolean) session.getAttribute("PARENT_PIN_VERIFIED");
+        if (Boolean.TRUE.equals(verified)) {
+            return "redirect:/parent/dashboard";
+        }
+        return "parent-pin";
+    }
+
+    @PostMapping("/pin/verify")
+    public String verifyPin(@RequestParam String pin,HttpSession session,Model model,Authentication authentication){
+        
+        String email= authentication.getName();
+        Parent parent= parentRepository.findByEmail(email).orElseThrow();
+        if(parentService.checkPin(pin, parent)){
+            session.setAttribute("PARENT_PIN_VERIFIED", true);
+            return "redirect:/parent/dashboard";
+        }
+        System.out.println("PIN entered = " + pin);
+        System.out.println("Stored pinHash = " + parent.getPinHash());
+        System.out.println("Matches = " + parentService.checkPin(pin, parent));
+        model.addAttribute("error",true);
+        return "parent-pin";
     }
 
     // ================= ADD CHILD =================

@@ -20,6 +20,8 @@ public class Parent {
 
     private String phone;
 
+    private String pinHash;
+    
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Child> children = new ArrayList<>();
 
@@ -36,7 +38,21 @@ public class Parent {
         this.phone = phone;
     }
 
+    
+
     // ===== Helper Methods (Professional Touch) =====
+
+    public Parent(Long id, String fullName, String email, String password, String phone, String pinHash,
+            List<Child> children, List<RewardVideo> rewardVideos) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.pinHash = pinHash;
+        this.children = children;
+        this.rewardVideos = rewardVideos;
+    }
 
     public void addChild(Child child) {
         children.add(child);
@@ -115,4 +131,14 @@ public class Parent {
     public void setRewardVideos(List<RewardVideo> rewardVideos) {
         this.rewardVideos = rewardVideos;
     }
+
+    public String getPinHash() {
+        return pinHash;
+    }
+
+    public void setPinHash(String pinHash) {
+        this.pinHash = pinHash;
+    }
+
+    
 }

@@ -50,6 +50,8 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
+            ).sessionManagement(sm -> sm
+                .sessionFixation(sf -> sf.migrateSession())
             );
 
         return http.build();

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Set New Parent PIN</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div style="max-width:420px;margin:80px auto;padding:24px;border:1px solid #ccc;border-radius:10px;">
+
+    <h2 style="text-align:center;">Set New PIN 🔑</h2>
+    <p style="text-align:center;color:#555;">
+        Choose a secure 4-digit Parent PIN
+    </p>
+
+    <form method="post" action="/parent/pin/reset/set-new-pin">
+
+        <!-- Hidden email -->
+        <input type="hidden" name="email" th:value="${email}" />
+
+        <label>New PIN</label><br>
+        <input type="password"
+               name="pin"
+               placeholder="4-digit PIN"
+               pattern="[0-9]{4}"
+               required
+               style="width:100%;padding:10px;margin-top:6px;margin-bottom:12px;"/>
+
+        <button type="submit"
+                style="width:100%;padding:10px;font-weight:bold;">
+            Save New PIN
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
