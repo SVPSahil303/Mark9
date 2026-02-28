@@ -89,7 +89,7 @@ public class AuthController {
         }
 
         session.setAttribute("LOGGED_IN_CHILD_ID", child.getId());
-
+        session.removeAttribute("PARENT_PIN_VERIFIED");
         return "redirect:/child/mode";
     }
 
